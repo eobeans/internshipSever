@@ -1,0 +1,22 @@
+{
+  "name": "internshipserver",
+  "version": "1.0.0",
+  "description": "毕业设计",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "马勇杰",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "moment": "^2.24.0",
+    "mysql": "^2.16.0",
+    "mysql2": "^1.6.5",
+    "promise": "^8.0.2",
+    "sequelize": "^5.1.0"
+  },
+  "devDependencies": {}
+}

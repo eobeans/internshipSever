@@ -40,6 +40,8 @@ const Student = sequelize.define('student', {
     hospital:Sequelize.STRING,
     phone:Sequelize.STRING,
     email:Sequelize.STRING,
+    openId:Sequelize.STRING,
+    password:Sequelize.STRING,
 }, {
     timestamps: false,
     tableName: 'student',
@@ -58,15 +60,16 @@ function alterStudent(form){
     // let b = 2;
     // [a, b] = [b, a];
     Student.update({
-        num:form.num,
-        name:form.name,
-        major:form.major,
-        rank:form.rank,
-        nation:form.nation,
-        city:form.city,
-        hospital:form.hospital,
-        phone:form.phone,
-        email:form.email,
+        // num:form.num,
+        // name:form.name,
+        // major:form.major,
+        // rank:form.rank,
+        // nation:form.nation,
+        // city:form.city,
+        // hospital:form.hospital,
+        // phone:form.phone,
+        // email:form.email,
+        ...form
       }, {
         where: {
             id:form.id
@@ -84,15 +87,16 @@ function deleteStudent(deleteId){
 
 function addStudent(form,callback){
     Student.create({
-        num:form.num,
-        name:form.name,
-        major:form.major,
-        rank:form.rank,
-        nation:form.nation,
-        city:form.city,
-        hospital:form.hospital,
-        phone:form.phone,
-        email:form.email
+        // num:form.num,
+        // name:form.name,
+        // major:form.major,
+        // rank:form.rank,
+        // nation:form.nation,
+        // city:form.city,
+        // hospital:form.hospital,
+        // phone:form.phone,
+        // email:form.email
+        ...form
     }).then(stu=>{
         callback(stu)
     })

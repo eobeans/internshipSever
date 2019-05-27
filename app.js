@@ -154,17 +154,25 @@ app.post('/addStudent.json',(req,res)=>{
         res.json(obj)
     })
 })
-//dailyRecord
-        //dailyRecord
-                //dailyRecord
-                        //dailyRecord
-                                //dailyRecord
-                                        //dailyRecord
+
+app.get('/getDepartment.json',(req,res)=>{
+    disease.getDepartmentList(result=>{
+        let departmentList=new Array()
+        for(i=0;i<result.length;i++){
+            departmentList.push(result[i].department)
+        }
+        let obj={
+            code:0,
+            departmentList,
+        }
+        res.json(obj)
+    })
+})
 
 app.get('/getDailyRecordCount.json',(req,res)=>{
     new Promise((resolve,reject)=>{
         dailyrecord.getDailyRecordCount(result=>{
-            let mycount=result
+            let mycount=result.count
             resolve(mycount)
         })
     }).then(mycount=>{
@@ -241,18 +249,28 @@ app.post('/getDailyRecord.json',(req,res)=>{
 })
 
 app.post('/deleteDailyRecord.json',(req,res)=>{
+    let deleteId=req.body.deleteId
     new Promise((resolve,reject)=>{
-        let deleteId=req.body.deleteId
-        dailyrecord.deleteDailyRecord(deleteId.id)
-        resolve(deleteId)
-    }).then((deleteId)=>{
+        medrecord.getMedrecordCount(deleteId,(result)=>{
+            if(result.mycount>1){
+                resolve(1)
+            }else{
+                resolve(0)
+            }
+        })
+    }).then((bool)=>{
+        if(bool==1){
+            console.log('delete medrecord but not dailyrecord')
+        }else if(bool==0){
+            dailyrecord.deleteDailyRecord(deleteId.id)
+        }
+    }).then(()=>{
         medrecord.deleteMedrecord(deleteId.medId)
-    }).then((result)=>{
         let msg="信息删除成功"
         let obj={
             code:0,
             msg,
-            deleteId:result,
+            deleteId,
         }
         res.json(obj)
     })
@@ -311,6 +329,43 @@ app.post('/alterDailyRecord.json',(req,res)=>{
     })
 })
 
+// app.post('/newAlterDailyRecord.json',(req,res)=>{
+//     let editForm=req.body.editForm
+//     new Promise((resolve,reject)=>{
+//         medrecord.getMedrecordCount(result=>{
+//             resolve(result.mycount)
+//         })
+//     }).then((mycount)=>{
+//         //改学号、时间等和dailyrecord关联的信息
+//         //如果能用外键，就不用设置学号、时间这些信息了
+//         for(i=0;i<mycount;i++){
+//             medrecord.alterMedrecord(editForm)
+//         }
+//     }).then(()=>{
+//         dailyrecord.alterDailyRecord(editForm)
+//         let msg="信息更改成功"
+//         let obj={
+//             code:0,
+//             msg,
+//         }
+//         res.json(obj)
+//     })
+// })
+
+app.post('/getDailyRecordByNum.json',(req,res)=>{
+    new Promise((resolve,reject)=>{
+        dailyrecord.getDailyRecordByNum(req.body.num,(result)=>{
+            resolve(result)
+        })
+    }).then((result)=>{
+        let obj={
+            code:0,
+            data:result,
+        }
+        res.json(obj)
+    })
+})
+
 app.post('/getList.json',(req,res)=>{
     new Promise((resolve,reject)=>{
         disease.getDiseaseByDep(req.body.department,(result)=>{
@@ -334,6 +389,7 @@ app.post('/getList.json',(req,res)=>{
         })
     })
 })
+
 //rotation
         //rotation
                 //rotation

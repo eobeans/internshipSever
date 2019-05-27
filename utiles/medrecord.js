@@ -72,13 +72,30 @@ function getactivity(form,callback){
         if (err){
             console.log("建立连接失败")
         }else{
-            sql="select activity,count(1) as mycount FROM medrecord WHERE num='" +form.num +"' and department='"+form.department + "'GROUP BY activity"
+            sql="select activity,count(1) as mycount FROM dailyrecord WHERE num='" +form.num +"' and department='"+form.department + "'GROUP BY activity"
             connection.query(sql,(err,result)=>{
                 if(err) throw err
 
                 connection.release()
                 let a = dataJson(result)
                 callback(a)
+            })
+        }
+    })
+}
+
+function getMedrecordCount(form,callback){
+    pool.getConnection((err,connection)=>{
+        if (err){
+            console.log("建立连接失败")
+        }else{
+            sql="select count(1) as mycount FROM medrecord WHERE num='" +form.num +"' and date='"+form.date +"'"
+            connection.query(sql,(err,result)=>{
+                if(err) throw err
+
+                connection.release()
+                let a = dataJson(result)
+                callback(a[0])
             })
         }
     })
@@ -106,7 +123,6 @@ const Medrecord = sequelize.define('medrecord',{
     age:Sequelize.INTEGER,
     diagnosis:Sequelize.STRING,
     operation:Sequelize.STRING,
-    activity:Sequelize.STRING,
     department:Sequelize.STRING,
     name:Sequelize.STRING,
 }, {
@@ -131,7 +147,6 @@ function addMedrecord(form,callback){
         age:form.age,
         diagnosis:form.diagnosis,
         operation:form.operation,
-        activity:form.activity,
         department:form.department,
         name:form.name,
     }).then(record=>{
@@ -149,7 +164,6 @@ function alterMedrecord(form){
         age:form.age,
         diagnosis:form.diagnosis,
         operation:form.operation,
-        activity:form.activity,
         department:form.department,
         name:form.name,
       }, {
@@ -169,5 +183,6 @@ module.exports={
     getdiagnosis,
     getoperation,
     getactivity,
+    getMedrecordCount,
 }
   
